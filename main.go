@@ -32,7 +32,6 @@ func main() {
 		return
 	}
 
-	for _, psp := range psps.Items {
 		// Attempt to create a pod that violates the PSP rules
 		pod := &corev1.Pod{
 			ObjectMeta: metav1.ObjectMeta{
@@ -75,4 +74,4 @@ func main() {
 	// Report on the current security level for multi-tenancy
 	fmt.Println("Current security level for multi-tenancy: UNKNOWN")
 	fmt.Println("More analysis and testing is required to determine the exact security level.")
-}
+

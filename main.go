@@ -18,6 +18,7 @@ func main() {
 		fmt.Println("Error Connecting to config:", err)
 		return
 	}
+  
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		fmt.Println("Error creating clientset:", err)

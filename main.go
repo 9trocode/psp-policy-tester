@@ -4,8 +4,7 @@ import (
 	"context"
 	"fmt"
 	"reflect"
-	"time"
-
+  
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -32,6 +31,12 @@ func main() {
 		return
 	}
 
+  fmt.Println(psps)
+
+    privileged := true
+		hostPID := true
+		hostNetwork := true
+
 	// Attempt to create a pod that violates the PSP rules
 	pod := &corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
@@ -44,27 +49,18 @@ func main() {
 						Image: "test-image",
 						SecurityContext: &corev1.SecurityContext{
 							// Attempt to violate the PSP rules by running as privileged
-							Privileged: func() *bool {
-								b := true
-								return &b
-							}(),
+							Privileged: &privileged,
 						},
 					},
 				},
 				// Attempt to violate the PSP rules by running as a host PID
-				HostPID: func() *bool {
-					b := true
-					return &b
-				}(),
+				HostPID: hostPID,
 				// Attempt to violate the PSP rules by using a host network
-				HostNetwork: func() *bool {
-					b := true
-					return &b
-				}(),
+				HostNetwork: hostNetwork,
 			},
 	}
 
-	psp, err := clientset.CoreV1().Pods("default").Create(pod)
+	psp, err := clientset.CoreV1().Pods("*").Create(context.TODO(), pod, metav1.CreateOptions{})
 	if err != nil {
 		// Check if the error is due to PSP violation
 		status, ok := err.(*metav1.Status)

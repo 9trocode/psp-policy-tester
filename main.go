@@ -76,9 +76,11 @@ func main() {
 		// 	// Delete the pod to clean up
 		// 	clientset.CoreV1().Pods("*").Delete(context.TODO(), pod.Name, metav1.DeleteOptions{})
 		// }
-	}
+	} else {
+    fmt.Println(psp)
+  }
 
 	// Report on the current security level for multi-tenancy
-	fmt.Println("Current security level for multi-tenancy: UNKNOWN", psp)
+	fmt.Println("Current security level for multi-tenancy: UNKNOWN")
 	fmt.Println("More analysis and testing is required to determine the exact security level.")
 }

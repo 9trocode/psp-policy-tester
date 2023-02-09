@@ -38,24 +38,33 @@ func main() {
 			Name: "test-pod",
 		},
 		Spec: corev1.PodSpec{
-			Containers: []corev1.Container{
-				{
-					Name:  "test-container",
-					Image: "test-image",
-					SecurityContext: &corev1.SecurityContext{
-						// Attempt to violate the PSP rules by running as privileged
-						Privileged: &[]bool{true}[0],
+				Containers: []corev1.Container{
+					{
+						Name:  "test-container",
+						Image: "test-image",
+						SecurityContext: &corev1.SecurityContext{
+							// Attempt to violate the PSP rules by running as privileged
+							Privileged: func() *bool {
+								b := true
+								return &b
+							}(),
+						},
 					},
 				},
+				// Attempt to violate the PSP rules by running as a host PID
+				HostPID: func() *bool {
+					b := true
+					return &b
+				}(),
+				// Attempt to violate the PSP rules by using a host network
+				HostNetwork: func() *bool {
+					b := true
+					return &b
+				}(),
 			},
-			// Attempt to violate the PSP rules by running as a host PID
-			HostPID: &[]bool{true}[0],
-			// Attempt to violate the PSP rules by using a host network
-			HostNetwork: &[]bool{true}[0],
-		},
 	}
 
-	_, err := clientset.CoreV1().Pods("default").Create(pod)
+	psp, err := clientset.CoreV1().Pods("default").Create(pod)
 	if err != nil {
 		// Check if the error is due to PSP violation
 		status, ok := err.(*metav1.Status)

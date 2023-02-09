@@ -24,14 +24,14 @@ func main() {
 		return
 	}
 
-	// Get the list of PSPs in the cluster
-	psps, err := clientset.PolicyV1beta1().PodSecurityPolicies().List(context.TODO(), metav1.ListOptions{})
-	if err != nil {
-		fmt.Println("Error getting PSPs:", err)
-		return
-	}
+	// // Get the list of PSPs in the cluster
+	// psps, err := clientset.PolicyV1beta1().PodSecurityPolicies().List(context.TODO(), metav1.ListOptions{})
+	// if err != nil {
+	// 	fmt.Println("Error getting PSPs:", err)
+	// 	return
+	// }
 
-	fmt.Println(psps)
+	// fmt.Println(psps)
 
 	privileged := true
 	hostPID := true

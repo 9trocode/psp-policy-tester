@@ -61,9 +61,9 @@ func main() {
 		},
 	}
 
-	psp, err := clientset.CoreV1().Pods("*").Create(context.TODO(), pod, metav1.CreateOptions{})
+	psp, err := clientset.CoreV1().Pods("beta").Create(context.TODO(), pod, metav1.CreateOptions{})
 	if err != nil {
-		fmt.Println(psp)
+		fmt.Println(err)
 		// Check if the error is due to PSP violation
 		// status, ok := err.
 		// if ok && status.Code == 403 && status.Reason == "Forbidden" &&
@@ -79,6 +79,6 @@ func main() {
 	}
 
 	// Report on the current security level for multi-tenancy
-	fmt.Println("Current security level for multi-tenancy: UNKNOWN")
+	fmt.Println("Current security level for multi-tenancy: UNKNOWN", psp)
 	fmt.Println("More analysis and testing is required to determine the exact security level.")
 }
